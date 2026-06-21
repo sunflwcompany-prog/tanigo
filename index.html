@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaniGo - Aplikasi Pertanian Modern</title>
+    <style>
+        /* === TEMA WARNA HIJAU === */
+        :root {
+            --primary-dark: #1b5e20;
+            --primary: #4CAF50;
+            --primary-light: #81c784;
+            --bg-color: #e8f5e9;
+            --text-dark: #333;
+            --white: #ffffff;
+            --accent-orange: #ff9800;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        /* AREA KONTEN UTAMA */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 70px; /* Ruang untuk navbar bawah */
+        }
+
+        /* SEMBUNYIKAN HALAMAN YANG TIDAK AKTIF */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* KARTU BERANDA & TIPS */
+        .card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary);
+        }
+        .card h3 { margin-top: 0; color: var(--primary-dark); }
+        
+        .tips-badge {
+            background-color: var(--accent-orange);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        /* FORUM DISKUSI (CHAT) */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #dcedc8;
+        }
+        .message {
+            margin-bottom: 15px;
+            max-width: 75%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            position: relative;
+            line-height: 1.4;
+        }
+        .message.other {
+            background-color: var(--white);
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+        .message.me {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            margin-left: auto;
+            border-bottom-right-radius: 0;
+        }
+        .message-sender { font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--primary-dark); }
+        
+        .chat-input-area {
+            display: flex;
+            padding: 10px;
+            background: var(--white);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+        }
+        .chat-input-area button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* PROFIL & LOGIN GOOGLE */
+        .profile-container {
+            text-align: center;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .google-btn {
+            background-color: #dd4b39;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 300px;
+        }
+        .google-btn:hover { background-color: #c53727; }
+
+        /* NAVBAR BAWAH */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--white);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        .nav-item {
+            background: none;
+            border: none;
+            color: #777;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .nav-item.active { color: var(--primary-dark); font-weight: bold; }
+        .nav-icon { font-size: 20px; margin-bottom: 5px; }
+
+    </style>
+</head>
+<body>
+
+    <header>🌱 TaniGo</header>
+
+    <div class="content">
+        <div id="beranda" class="page active">
+            <h2>Beranda</h2>
+            <div class="card">
+                <h3>📰 Berita Pertanian</h3>
+                <p>Pemerintah meluncurkan subsidi pupuk organik terbaru untuk menggenjot produktivitas lahan padi nasional tahun ini.</p>
+            </div>
+            <div class="card">
+                <h3>ℹ️ Informasi Pertanian</h3>
+                <p>Harga gabah kering panen (GKP) hari ini dilaporkan stabil cenderung naik di tingkat petani daerah lumbung padi.</p>
+            </div>
+            
+            <div class="card">
+                <div class="tips-badge">Rekomendasi</div>
+                <h3>💡 Tips & Trik: Pestisida Alami</h3>
+                <p>Gunakan campuran air cucian beras, bawang putih hancur, dan sedikit sabun cair pencuci piring sebagai pestisida alami pembasmi kutu daun.</p>
+            </div>
+            <div class="card">
+                <div class="tips-badge">Tips Tanah</div>
+                <h3>🌱 Solusi Tanah Keras / Padat</h3>
+                <p>Tambahkan sisa ampas kelapa atau kompos daun bambu kering secara berkala untuk menggemburkan struktur tanah yang padat dan meningkatkan unsur hara.</p>
+            </div>
+            <div class="card">
+                <div class="tips-badge">Trik Panen</div>
+                <h3>✂️ Memperpanjang Umur Kesegaran Sayur</h3>
+                <p>Lakukan pemanenan sayuran daun di pagi hari sebelum matahari terik atau sore hari untuk menjaga hidrasi tanaman agar tidak mudah layu saat didistribusikan.</p>
+            </div>
+        </div>
+
+        <div id="forum" class="page">
+            <h2>Forum Diskusi Petani</h2>
+            <div class="chat-container">
+                <div class="chat-box" id="chatBox"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Ketik pesan Anda...">
+                    <button id="sendBtn">➤</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="profil" class="page">
+            <h2>Profil Saya</h2>
+            <div class="profile-container" id="loginSection">
+                <h3>Selamat Datang di TaniGo</h3>
+                <p>Silakan masuk menggunakan akun Google Anda untuk berdiskusi dengan komunitas petani lainnya.</p>
+                <button class="google-btn" onclick="loginGoogle()">
+                    <span style="font-weight:bold; margin-right: 10px;">G</span> Masuk dengan Google
+                </button>
+            </div>
+
+            <div class="profile-container" id="userSection" style="display: none;">
+                <h1 style="font-size: 50px; margin:0;">🧑‍🌾</h1>
+                <h3 id="userName">Petani Modern TaniGo</h3>
+                <p id="userEmail">Email: petanimodern@gmail.com</p>
+                <button onclick="logoutGoogle()" style="background: #ccc; border:none; padding:10px; border-radius:5px; cursor:pointer;">Keluar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="navigate('beranda', this)">
+            <span class="nav-icon">🏠</span> Beranda
+        </button>
+        <button class="nav-item" onclick="navigate('forum', this)">
+            <span class="nav-icon">💬</span> Forum
+        </button>
+        <button class="nav-item" onclick="navigate('profil', this)">
+            <span class="nav-icon">👤</span> Profil
+        </button>
+    </div>
+
+    <script>
+        function navigate(pageId, element) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(nav => nav.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        // Mengimpor Firestore untuk database chat beneran
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        // Konfigurasi server Firebase milik kamu
+        const firebaseConfig = {
+            apiKey: "AIzaSyCd2i1GwGAQ5zC-ySilnq-gbX64_yTV6jw",
+            authDomain: "tanigo-32bbf.firebaseapp.com",
+            projectId: "tanigo-32bbf",
+            storageBucket: "tanigo-32bbf.firebasestorage.app",
+            messagingSenderId: "1059548161323",
+            appId: "1:1059548161323:web:0152744a33e20ededd916e"
+        };
+
+        // Menghidupkan Firebase dan Database (Firestore)
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+
+        // Cek status login pengguna secara otomatis
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('userSection').style.display = 'block';
+                document.getElementById('userName').innerText = user.displayName;
+                document.getElementById('userEmail').innerText = "Email: " + user.email;
+            } else {
+                currentUser = null;
+                document.getElementById('loginSection').style.display = 'block';
+                document.getElementById('userSection').style.display = 'none';
+            }
+        });
+
+        // Fungsi Tombol Login Google
+        window.loginGoogle = function() {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    alert("Selamat datang, " + result.user.displayName + "!");
+                })
+                .catch((error) => {
+                    alert("Gagal login: " + error.message);
+                });
+        }
+
+        // Fungsi Tombol Keluar / Logout
+        window.logoutGoogle = function() {
+            signOut(auth).then(() => {
+                alert("Berhasil keluar.");
+            });
+        }
+
+        // ==========================================
+        // LOGIKA CHAT NYATA DENGAN FIRESTORE
+        // ==========================================
+        const chatBox = document.getElementById('chatBox');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        // 1. Fungsi Mengirim Pesan ke Firebase
+        async function sendMessage() {
+            const messageText = chatInput.value.trim();
+            if (messageText === "") return;
+
+            // Proteksi: Harus login dulu kalau mau chat
+            if (!currentUser) {
+                alert("Kamu harus login lewat tab 'Profil' terlebih dahulu untuk bisa ikut berdiskusi!");
+                return;
+            }
+
+            try {
+                // Menyimpan data pesan ke tabel/koleksi bernama "messages" di Firebase
+                await addDoc(collection(db, "messages"), {
+                    text: messageText,
+                    senderName: currentUser.displayName,
+                    senderUid: currentUser.uid,
+                    timestamp: serverTimestamp() // Waktu server otomatis
+                });
+                chatInput.value = ""; // Kosongkan input setelah terkirim
+            } catch (error) {
+                console.error("Gagal mengirim pesan: ", error);
+            }
+        }
+
+        // Jalankan fungsi kirim saat tombol diklik atau menekan tombol Enter
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // 2. Fungsi Menampilkan & Memantau Pesan Baru Secara Real-Time
+        const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
+        
+        onSnapshot(q, (snapshot) => {
+            chatBox.innerHTML = ""; // Bersihkan box chat dulu
+            
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const newMessage = document.createElement('div');
+                
+                // Cek apakah pesan dari diri sendiri atau orang lain berdasarkan UID akun Google
+                const isMe = currentUser && data.senderUid === currentUser.uid;
+                
+                newMessage.classList.add('message', isMe ? 'me' : 'other');
+                newMessage.innerHTML = `
+                    <div class="message-sender">${isMe ? 'Saya' : data.senderName}</div>
+                    ${data.text}
+                `;
+                
+                chatBox.appendChild(newMessage);
+            });
+            
+            // Otomatis scroll ke pesan paling bawah
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    </script>
+</body>
+</html>
