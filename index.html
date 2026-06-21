@@ -2,579 +2,344 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>TaniGo - Aplikasi Pertanian Modern</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Urban Farming</title>
+    <!-- Import Font Modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* === TEMA UI ALA iOS === */
         :root {
-            --ios-green: #34C759;
-            --ios-green-dark: #248A3D;
-            --ios-bg: #F2F2F7;
-            --ios-card: #FFFFFF;
-            --ios-text-main: #000000;
-            --ios-text-muted: #8E8E93;
-            --ios-border: #C6C6C8;
-            --ios-blue: #007AFF;
-            --ios-orange: #FF9500;
-            --ios-chat-other: #E5E5EA;
+            --primary-color: #2d6a4f;
+            --secondary-color: #40916c;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            --text-dark: #1b4332;
+            --text-muted: #555;
         }
 
-        /* TIPOGRAFI & RESET */
-        * { box-sizing: border-box; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: var(--ios-bg);
-            color: var(--ios-text-main);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            /* UBAH URL DI BAWAH INI DENGAN LINK/LOKASI LOGO ANDA */
+            background-image: url('https://via.placeholder.com/1000x1000/e9ecef/cccccc?text=GANTI+DENGAN+LOGO+ANDA');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #e9ecef;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Kontainer Utama dengan Efek Kaca (Glassmorphism) */
+        #app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            position: relative;
             overflow: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* HEADER (Efek Transparan Blur ala iOS) */
         header {
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            color: var(--ios-text-main);
-            padding: 16px 20px;
-            padding-top: max(16px, env(safe-area-inset-top)); /* Adaptasi Poni/Notch iPhone */
+            background: var(--primary-color);
+            color: white;
+            padding: 24px 20px;
             text-align: center;
-            font-size: 17px;
-            font-weight: 600;
-            border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 100;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.2);
         }
 
-        /* AREA KONTEN UTAMA */
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            padding-top: calc(60px + env(safe-area-inset-top));
-            padding-bottom: calc(90px + env(safe-area-inset-bottom));
-        }
-
-        /* SEMBUNYIKAN HALAMAN YANG TIDAK AKTIF */
-        .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h2 {
-            font-size: 28px;
+        header h1 {
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-top: 0;
-            margin-bottom: 20px;
             letter-spacing: -0.5px;
         }
 
-        /* KARTU KONTEN (Inset Grouped ala iOS) */
+        header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            display: block; /* Akan diatur via JS */
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            margin-top: 20px;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Styling Kartu / Konten */
         .card {
-            background-color: var(--ios-card);
+            background: white;
             border-radius: 16px;
             padding: 16px;
             margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .card h3 { 
-            margin-top: 0; 
-            font-size: 17px; 
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(45, 106, 79, 0.15);
+            border-color: var(--secondary-color);
         }
-        .card p {
-            margin: 8px 0 0 0;
-            font-size: 15px;
-            line-height: 1.4;
-            color: #333;
-        }
-        
-        .tips-badge {
-            background-color: var(--ios-orange);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
+
+        .card-tag {
             display: inline-block;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #d8f3dc;
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
         }
 
-        /* KHUSUS HALAMAN VIDEO (Layar Penuh) */
-        #video.page {
-            padding: 0;
-            height: 100vh;
-            background-color: #000;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 50; /* Di bawah header jika transparan, tapi kita buat penuh */
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
         }
 
-        .video-container {
-            height: 100%;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            -ms-overflow-style: none; 
-            scrollbar-width: none;
-        }
-        .video-container::-webkit-scrollbar { display: none; }
-
-        .video-item {
-            height: 100vh;
-            width: 100%;
-            scroll-snap-align: start;
-            position: relative;
-            background-color: #111;
+        .card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .video-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        /* Halaman Detail */
+        #detail-view {
+            display: none;
+            background: white;
+            min-height: 100vh;
+            border-radius: 20px 20px 0 0;
+            padding: 24px;
+            animation: slideUp 0.3s ease forwards;
         }
 
-        .video-overlay {
-            position: absolute;
-            bottom: calc(90px + env(safe-area-inset-bottom));
-            left: 20px;
-            color: white;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.6);
-            z-index: 2;
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
-        .video-overlay h3 { margin: 0 0 5px 0; font-size: 17px; font-weight: 600; }
-        .video-overlay p { margin: 0; font-size: 15px; }
 
-        .upload-btn {
-            position: absolute;
-            top: calc(20px + env(safe-area-inset-top));
-            right: 20px;
-            background-color: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.3);
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            background: #f1f5f9;
+            color: var(--text-dark);
+            border: none;
             padding: 8px 16px;
             border-radius: 20px;
-            cursor: pointer;
-            z-index: 100;
+            font-size: 0.9rem;
             font-weight: 600;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* FORUM DISKUSI (iMessage Style) */
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 220px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-            background: var(--ios-bg);
-        }
-        .chat-box {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            padding: 15px 0;
-            overflow-y: auto;
-        }
-        .message {
-            margin-bottom: 15px;
-            max-width: 75%;
-            padding: 10px 14px;
-            font-size: 15px;
-            line-height: 1.4;
-            position: relative;
-            clear: both;
-        }
-        .message.other {
-            background-color: var(--ios-chat-other);
-            color: var(--ios-text-main);
-            align-self: flex-start;
-            border-radius: 18px 18px 18px 4px;
-        }
-        .message.me {
-            background-color: var(--ios-green);
-            color: white;
-            align-self: flex-end;
-            border-radius: 18px 18px 4px 18px;
-        }
-        .message-sender { 
-            font-size: 11px; 
-            margin-bottom: 4px; 
-            color: var(--ios-text-muted); 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .message.me .message-sender { display: none; } /* Sembunyikan nama diri sendiri */
-
-        .chat-input-area {
-            display: flex;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-top: 0.5px solid var(--ios-border);
-            border-radius: 24px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-        .chat-input-area input {
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid var(--ios-border);
-            border-radius: 20px;
-            font-size: 15px;
-            outline: none;
-            background-color: #fff;
-        }
-        .chat-input-area button {
-            background-color: var(--ios-blue); /* Biru khas tombol send iOS */
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            margin-left: 10px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin-bottom: 20px;
+            font-family: inherit;
+            transition: background 0.2s;
         }
 
-        /* PROFIL & LOGIN GOOGLE */
-        .profile-container {
+        .btn-back:hover {
+            background: #e2e8f0;
+        }
+
+        .detail-tag {
+            margin-bottom: 12px;
+        }
+
+        .detail-title {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .detail-content {
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-align: justify;
+        }
+
+        .detail-content p {
+            margin-bottom: 12px;
+        }
+
+        .detail-content h4 {
+            color: var(--text-dark);
+            margin: 16px 0 8px 0;
+        }
+
+        footer {
             text-align: center;
-            background: var(--ios-card);
-            padding: 30px 20px;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .profile-container h3 { font-size: 20px; font-weight: 600; margin-top: 10px; }
-        .profile-container p { color: var(--ios-text-muted); font-size: 15px; }
-        
-        .google-btn {
-            background-color: #fff;
-            color: #333;
-            border: 1px solid var(--ios-border);
-            padding: 14px 20px;
-            border-radius: 12px;
-            font-size: 16px;
+            padding: 24px 20px;
+            font-size: 0.85rem;
             font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px auto;
-            width: 100%;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            color: var(--primary-color);
+            background: transparent;
         }
-        .google-btn span { font-size: 18px; }
-
-        .logout-btn {
-            background-color: #FF3B30; /* Merah destruktif iOS */
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 600;
-            width: 100%;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-
-        /* NAVBAR BAWAH (Glassmorphism & Safe Area) */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            display: flex;
-            justify-content: space-around;
-            padding-top: 10px;
-            padding-bottom: calc(10px + env(safe-area-inset-bottom));
-            border-top: 0.5px solid rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-        .nav-item {
-            background: none;
-            border: none;
-            color: var(--ios-text-muted);
-            font-size: 10px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 25%;
-        }
-        .nav-item.active { color: var(--ios-green); }
-        .nav-icon { font-size: 24px; margin-bottom: 3px; filter: grayscale(100%) opacity(0.6); }
-        .nav-item.active .nav-icon { filter: grayscale(0%) opacity(1); }
-
     </style>
 </head>
 <body>
 
-    <header id="mainHeader">🌱 TaniGo</header>
+<div id="app-container">
+    
+    <!-- TAMPILAN BERANDA -->
+    <div id="home-view">
+        <header>
+            <h1>Portal Pertanian Modern</h1>
+            <p>Panduan Praktis & Wawasan Urban Farming</p>
+        </header>
 
-    <div class="content">
-        <div id="beranda" class="page active">
-            <h2>Beranda</h2>
-            <div class="card">
-                <h3>📰 Berita Pertanian</h3>
-                <p>Pemerintah meluncurkan subsidi pupuk organik terbaru untuk menggenjot produktivitas lahan padi nasional tahun ini.</p>
-            </div>
-            <div class="card">
-                <h3>ℹ️ Informasi Pasar</h3>
-                <p>Harga gabah kering panen (GKP) hari ini dilaporkan stabil cenderung naik di tingkat petani daerah lumbung padi.</p>
-            </div>
-            
-            <div class="card">
-                <div class="tips-badge">Rekomendasi</div>
-                <h3>💡 Pestisida Alami</h3>
-                <p>Gunakan campuran air cucian beras, bawang putih hancur, dan sedikit sabun cair sebagai pestisida pembasmi kutu daun.</p>
-            </div>
-        </div>
+        <main>
+            <div class="section-title">Eksplorasi</div>
 
-        <div id="video" class="page">
-            <button class="upload-btn" onclick="document.getElementById('fileUpload').click()">
-                <span>+</span> Unggah
-            </button>
-            <input type="file" id="fileUpload" accept="video/*" style="display: none;" onchange="handleVideoUpload(event)">
-            
-            <div class="video-container" id="videoFeed">
-                <div class="video-item">
-                    <video controls loop playsinline>
-                        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                    </video>
-                    <div class="video-overlay">
-                        <h3>@PetaniTeladan</h3>
-                        <p>Cek kondisi tanah sebelum tanam 🌱</p>
-                    </div>
-                </div>
-
-                <div class="video-item">
-                    <video controls loop playsinline>
-                        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                    </video>
-                    <div class="video-overlay">
-                        <h3>@TaniGo_Pakar</h3>
-                        <p>Tips irigasi cerdas di musim kemarau 💧 #TaniGo</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="forum" class="page">
-            <h2>Forum Diskusi</h2>
-            <div class="chat-container">
-                <div class="chat-box" id="chatBox"></div>
-                <div class="chat-input-area">
-                    <input type="text" id="chatInput" placeholder="Ketik pesan (iMessage)...">
-                    <button id="sendBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="profil" class="page">
-            <h2>Profil Saya</h2>
-            <div class="profile-container" id="loginSection">
-                <h1 style="font-size: 40px; margin: 10px 0;">👋</h1>
-                <h3>Masuk ke TaniGo</h3>
-                <p>Bergabunglah dengan komunitas petani lainnya.</p>
-                <button class="google-btn" onclick="loginGoogle()">
-                    <span style="margin-right: 10px;">🇬</span> Lanjutkan dengan Google
-                </button>
+            <!-- Kartu Trivia -->
+            <div class="card" onclick="openDetail('trivia')">
+                <span class="card-tag">Trivia</span>
+                <h3>Sejarah Pertanian</h3>
+                <p>Bagaimana manusia berevolusi dari pemburu-pengumpul menjadi masyarakat agraris menetap?</p>
             </div>
 
-            <div class="profile-container" id="userSection" style="display: none;">
-                <h1 style="font-size: 60px; margin: 0;">🧑‍🌾</h1>
-                <h3 id="userName">Petani Modern TaniGo</h3>
-                <p id="userEmail">petanimodern@gmail.com</p>
-                <button class="logout-btn" onclick="logoutGoogle()">Keluar dari Akun</button>
+            <!-- Kartu Berita -->
+            <div class="card" onclick="openDetail('berita')">
+                <span class="card-tag">Berita Terkini</span>
+                <h3>Tren Hidroponik Vertikal di Lahan Sempit</h3>
+                <p>Warga perkotaan kini memaksimalkan balkon dan atap rumah untuk ketahanan pangan mandiri.</p>
             </div>
+
+            <!-- Kartu Tips & Trik 1 -->
+            <div class="card" onclick="openDetail('tips1')">
+                <span class="card-tag">Tips & Trik</span>
+                <h3>Cara Menanam Pakcoy Kualitas Super</h3>
+                <p>Rahasia campuran media tanam dan intensitas cahaya agar pakcoy tumbuh renyah dan tidak pahit.</p>
+            </div>
+
+            <!-- Kartu Tips & Trik 2 -->
+            <div class="card" onclick="openDetail('tips2')">
+                <span class="card-tag">Tips & Trik</span>
+                <h3>Manajemen Penyiraman Cerdas</h3>
+                <p>Kapan waktu terbaik menyiram tanaman? Hindari kesalahan umum yang membuat akar tanaman membusuk.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- TAMPILAN DETAIL ARTIKEL (Disembunyikan secara default) -->
+    <div id="detail-view">
+        <button class="btn-back" onclick="closeDetail()">← Kembali</button>
+        <span class="card-tag detail-tag" id="detail-tag">Tag</span>
+        <h2 class="detail-title" id="detail-title">Judul Artikel</h2>
+        <div class="detail-content" id="detail-content">
+            <!-- Konten akan dimuat oleh JavaScript -->
         </div>
     </div>
 
-    <div class="bottom-nav">
-        <button class="nav-item active" onclick="navigate('beranda', this)">
-            <span class="nav-icon">🏠</span> Beranda
-        </button>
-        <button class="nav-item" onclick="navigate('video', this)">
-            <span class="nav-icon">▶️</span> Video
-        </button>
-        <button class="nav-item" onclick="navigate('forum', this)">
-            <span class="nav-icon">💬</span> Forum
-        </button>
-        <button class="nav-item" onclick="navigate('profil', this)">
-            <span class="nav-icon">👤</span> Profil
-        </button>
-    </div>
+    <!-- FOOTER DEVELOPER -->
+    <footer>
+        Dikembangkan oleh Rizki Dwi Bakti
+    </footer>
 
-    <script>
-        function navigate(pageId, element) {
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => page.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
+</div>
 
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(nav => nav.classList.remove('active'));
-            element.classList.add('active');
-
-            // Sembunyikan header jika berada di halaman video agar video benar-benar layar penuh
-            const header = document.getElementById('mainHeader');
-            if(pageId === 'video') {
-                header.style.display = 'none';
-            } else {
-                header.style.display = 'block';
-            }
+<!-- SCRIPT LOGIKA APLIKASI -->
+<script>
+    // Database Konten
+    const database = {
+        trivia: {
+            tag: "Trivia",
+            title: "Sejarah Pertanian: Dari Berburu hingga Teknologi",
+            content: `
+                <p>Sejarah pertanian dimulai sekitar 10.000 hingga 12.000 tahun yang lalu, sebuah periode yang sering disebut sebagai <strong>Revolusi Neolitik</strong>. Pada masa ini, manusia purba mulai meninggalkan gaya hidup nomaden (berpindah-pindah untuk berburu dan meramu) dan mulai menetap untuk membudidayakan tanaman dan menjinakkan hewan.</p>
+                <p>Daerah Hilal Subur (Fertile Crescent) di Timur Tengah diyakini sebagai salah satu pusat domestikasi tanaman pertama, seperti gandum dan barley. Pertanian kemudian berkembang secara independen di berbagai belahan dunia, termasuk Tiongkok (padi dan millet) dan Mesoamerika (jagung dan kacang-kacangan).</p>
+                <p>Perkembangan ini adalah tonggak terpenting dalam sejarah peradaban manusia karena surplus makanan memungkinkan terbentuknya kota, pembagian kerja, dan akhirnya inovasi teknologi yang membawa kita ke era modern seperti saat ini.</p>
+            `
+        },
+        berita: {
+            tag: "Berita Terkini",
+            title: "Tren Hidroponik Vertikal di Lahan Sempit Semakin Meroket",
+            content: `
+                <p>Di tengah keterbatasan lahan perkotaan, sistem <em>Vertical Farming</em> (pertanian vertikal) berbasis hidroponik kini menjadi primadona. Menggunakan pipa PVC yang disusun bertingkat, warga dapat menanam hingga 50 lubang tanam hanya dalam area seluas 1x1 meter persegi.</p>
+                <p>Sistem <em>Nutrient Film Technique</em> (NFT) menjadi yang paling banyak diaplikasikan karena dinilai sangat efisien dalam penggunaan air dan nutrisi cair (AB Mix). Selain untuk konsumsi pribadi, tren ini juga mulai digarap sebagai bisnis skala rumah tangga (microgreens) yang memasok kebutuhan kafe dan restoran sehat di tengah kota.</p>
+            `
+        },
+        tips1: {
+            tag: "Tips & Trik",
+            title: "Cara Menanam Pakcoy Kualitas Super",
+            content: `
+                <p>Menanam pakcoy di pot atau polybag sangat mudah jika Anda memperhatikan tiga aspek penting berikut:</p>
+                <h4>1. Media Tanam Poros</h4>
+                <p>Gunakan campuran tanah gembur, arang sekam, dan kompos/pupuk kandang dengan perbandingan 1:1:1. Media yang poros (air mudah mengalir) mencegah penyakit busuk akar.</p>
+                <h4>2. Sinar Matahari</h4>
+                <p>Pakcoy membutuhkan sinar matahari penuh minimal 4-6 jam sehari. Jika diletakkan di area yang teduh, batang pakcoy akan tumbuh kutilang (kurus, tinggi, langsing) dan daunnya mengecil.</p>
+                <h4>3. Nutrisi Masa Vegetatif</h4>
+                <p>Karena pakcoy dipanen daunnya, fokuskan pemberian pupuk dengan kandungan Nitrogen (N) tinggi pada minggu ke-2 setelah tanam.</p>
+            `
+        },
+        tips2: {
+            tag: "Tips & Trik",
+            title: "Manajemen Penyiraman Tanaman yang Cerdas",
+            content: `
+                <p>Kesalahan pemula dalam urban farming adalah "terlalu rajin" menyiram tanaman. Overwatering adalah penyebab kematian tanaman nomor satu.</p>
+                <h4>Waktu Terbaik</h4>
+                <p>Pagi hari (antara jam 6 - 8 pagi) adalah waktu terbaik. Air memiliki waktu untuk meresap dan kelebihan air di daun bisa mengering seiring naiknya matahari, mencegah munculnya jamur.</p>
+                <h4>Cek Kelembapan Tanah</h4>
+                <p>Sebelum menyiram, tusukkan jari Anda sekitar 2-3 cm ke dalam tanah. Jika masih terasa lembap dan dingin, tunda penyiraman. Menyiramlah hanya saat lapisan atas tanah sudah mulai mengering.</p>
+            `
         }
+    };
 
-        function handleVideoUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const videoURL = URL.createObjectURL(file);
-                const feed = document.getElementById('videoFeed');
-                
-                const newVideoItem = document.createElement('div');
-                newVideoItem.classList.add('video-item');
-                
-                newVideoItem.innerHTML = `
-                    <video controls loop autoplay playsinline>
-                        <source src="${videoURL}" type="${file.type}">
-                    </video>
-                    <div class="video-overlay">
-                        <h3>@Anda</h3>
-                        <p>Video edukasi terbaru Anda 🌟</p>
-                    </div>
-                `;
-                
-                feed.insertBefore(newVideoItem, feed.firstChild);
-                alert('Video berhasil diunggah!');
-            }
-        }
-    </script>
+    // Fungsi Navigasi
+    const homeView = document.getElementById('home-view');
+    const detailView = document.getElementById('detail-view');
+    const tagEl = document.getElementById('detail-tag');
+    const titleEl = document.getElementById('detail-title');
+    const contentEl = document.getElementById('detail-content');
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCd2i1GwGAQ5zC-ySilnq-gbX64_yTV6jw",
-            authDomain: "tanigo-32bbf.firebaseapp.com",
-            projectId: "tanigo-32bbf",
-            storageBucket: "tanigo-32bbf.firebasestorage.app",
-            messagingSenderId: "1059548161323",
-            appId: "1:1059548161323:web:0152744a33e20ededd916e"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
-
-        let currentUser = null;
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('userSection').style.display = 'block';
-                document.getElementById('userName').innerText = user.displayName;
-                document.getElementById('userEmail').innerText = user.email;
-            } else {
-                currentUser = null;
-                document.getElementById('loginSection').style.display = 'block';
-                document.getElementById('userSection').style.display = 'none';
-            }
-        });
-
-        window.loginGoogle = function() {
-            signInWithPopup(auth, provider).then((result) => {
-                // Login berhasil (Tidak perlu alert berlebihan ala iOS)
-            }).catch((error) => {
-                alert("Gagal login: " + error.message);
-            });
-        }
-
-        window.logoutGoogle = function() {
-            signOut(auth);
-        }
-
-        const chatBox = document.getElementById('chatBox');
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
-
-        async function sendMessage() {
-            const messageText = chatInput.value.trim();
-            if (messageText === "") return;
-
-            if (!currentUser) {
-                alert("Silakan masuk lewat tab 'Profil' terlebih dahulu.");
-                return;
-            }
-
-            try {
-                await addDoc(collection(db, "messages"), {
-                    text: messageText,
-                    senderName: currentUser.displayName,
-                    senderUid: currentUser.uid,
-                    timestamp: serverTimestamp()
-                });
-                chatInput.value = "";
-            } catch (error) {
-                console.error("Gagal mengirim pesan: ", error);
-            }
-        }
-
-        sendBtn.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
-
-        const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
+    function openDetail(id) {
+        // Ambil data berdasarkan ID
+        const data = database[id];
         
-        onSnapshot(q, (snapshot) => {
-            chatBox.innerHTML = "";
-            
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                const newMessage = document.createElement('div');
-                const isMe = currentUser && data.senderUid === currentUser.uid;
-                
-                newMessage.classList.add('message', isMe ? 'me' : 'other');
-                newMessage.innerHTML = `
-                    <div class="message-sender">${isMe ? '' : data.senderName}</div>
-                    ${data.text}
-                `;
-                
-                chatBox.appendChild(newMessage);
-            });
-            
-            chatBox.scrollTop = chatBox.scrollHeight;
-        });
-    </script>
+        // Masukkan data ke elemen HTML
+        tagEl.innerText = data.tag;
+        titleEl.innerText = data.title;
+        contentEl.innerHTML = data.content;
+
+        // Transisi tampilan
+        homeView.style.display = 'none';
+        detailView.style.display = 'block';
+        
+        // Scroll kembali ke atas
+        window.scrollTo(0, 0);
+    }
+
+    function closeDetail() {
+        // Transisi tampilan kembali
+        detailView.style.display = 'none';
+        homeView.style.display = 'block';
+        
+        // Scroll kembali ke atas
+        window.scrollTo(0, 0);
+    }
+</script>
+
 </body>
 </html>
